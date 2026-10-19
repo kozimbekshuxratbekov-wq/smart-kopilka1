@@ -20,9 +20,14 @@
     .avatar{font:700 13px "DM Sans",sans-serif}.admin-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}.admin-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.admin-row:last-child{border:0}.admin-copy{min-width:0}.admin-title{font-size:12px;font-weight:700}.admin-meta{color:var(--muted);font-size:10px;overflow-wrap:anywhere}.admin-actions{display:flex;gap:6px;flex-shrink:0}.profile-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.profile-detail{padding:10px;border:1px solid var(--line);border-radius:6px;background:#141814}.profile-detail span{display:block;color:var(--muted);font-size:10px}.profile-detail strong{display:block;margin-top:3px;font-size:12px;overflow-wrap:anywhere}.profile-hero{display:flex;align-items:center;gap:13px;padding:17px 0 20px;border-bottom:1px solid var(--line);margin-bottom:14px}.profile-avatar-large{width:52px;height:52px;display:grid;place-items:center;border-radius:50%;background:var(--green);color:#17200b;font:800 19px Manrope,sans-serif}.profile-hero h2{margin:0;font:700 17px Manrope,sans-serif}.profile-hero p{margin:2px 0 0;color:var(--muted);font-size:11px}.profile-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.contract-copy{max-height:42vh;overflow:auto;padding-right:4px;color:#cbd1c7;font-size:11px;line-height:1.65}.contract-copy h3{margin:14px 0 4px;color:var(--text);font:700 12px Manrope,sans-serif}.contract-copy p{margin:6px 0}.risk-note{padding:10px;border:1px solid #665338;border-radius:5px;background:#292419;color:#e4d3a7;font-size:10px}.rate-live{color:var(--green)}.rate-fallback{color:#d6c28e}.bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr))}
     @media(max-width:720px){.admin-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-actions{flex-direction:column}.admin-row{align-items:flex-start}.profile-summary{grid-template-columns:1fr}}
   </style>
+  <style>
+    .payment-methods{display:grid;gap:7px;margin-top:17px;padding-top:13px;border-top:1px solid #526043}.payment-methods>span{color:#c4cbbd;font-size:10px;font-weight:700}.payment-methods>div{display:flex;gap:8px}.payment-option{min-width:96px;display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid #41493b;border-radius:6px;background:#171c16;color:var(--text);text-align:left}.payment-option strong{font-size:12px}.payment-option small{color:var(--muted);font-size:9px}.payment-option:disabled{opacity:.72;cursor:not-allowed}.bottom-nav[hidden]{display:none!important}
+    .auth-gate{min-height:100vh;display:grid;place-items:center;padding:24px}.auth-gate[hidden],.app-shell[hidden]{display:none!important}.auth-card{width:min(100%,420px);padding:24px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}.auth-card h1{margin:0 0 8px;font:700 20px Manrope,sans-serif}.auth-card p{color:var(--muted);font-size:13px}.auth-status{margin-top:14px;color:var(--green);font-size:12px}
+  </style>
 </head>
 <body>
-  <div class="app-shell">
+  <section class="auth-gate" id="authGate" aria-live="polite"><div class="auth-card"><div class="brand"><span class="brand-mark" aria-hidden="true">◒</span><span>smart kopilka</span></div><h1 style="margin-top:20px">Hisobingiz tekshirilmoqda</h1><p id="authMessage">Telegram sessiyasi xavfsiz tekshiriladi. Boshqa hisob ma’lumoti ko‘rsatilmaydi.</p><div class="auth-status" id="authStatus">Kutib turing…</div></div></section>
+  <div class="app-shell" id="mainApp" hidden>
     <header class="topbar">
       <div class="brand"><span class="brand-mark" aria-hidden="true">◒</span><span>smart kopilka</span></div>
       <div class="topbar-right"><span class="date-label" id="todayLabel"></span><button class="avatar" id="avatar" data-action="profile" aria-label="Shaxsiy kabinetni ochish">S</button></div>
@@ -32,7 +37,7 @@
       <section class="view active" data-view="home">
         <div class="page-heading"><div><div class="eyebrow">Moliyaviy nazorat</div><h1 id="greeting">Xush kelibsiz</h1><p class="subheading">Maqsadlaringiz sari bir qadam yaqin.</p></div><button class="btn btn-primary" data-action="new-goal">+ Maqsad yaratish</button></div>
         <div class="overview-grid">
-          <section class="balance-panel"><div class="panel-kicker">Umumiy mablag‘</div><div class="total-balance" id="totalBalance">—</div><div class="usd-line" id="usdBalance">USD ekvivalenti</div><div class="rate-meta"><span class="field-help" id="rateStatus">Kurs yuklanmoqda…</span><button class="text-link" data-action="refresh-rate">Yangilash</button></div><div class="balance-split"><div class="split-item"><span>Erkin mablag‘</span><strong id="availableBalance">—</strong></div><div class="split-item"><span>Maqsadlarda</span><strong id="lockedBalance">—</strong></div></div><div class="balance-actions"><button class="btn btn-primary" data-action="transaction" data-kind="income">+ Kirim</button><button class="btn" data-action="transaction" data-kind="expense">− Chiqim</button></div></section>
+          <section class="balance-panel"><div class="panel-kicker">Umumiy mablag‘</div><div class="total-balance" id="totalBalance">—</div><div class="usd-line" id="usdBalance">USD ekvivalenti</div><div class="rate-meta"><span class="field-help" id="rateStatus">Kurs yuklanmoqda…</span><button class="text-link" data-action="refresh-rate">Yangilash</button></div><div class="balance-split"><div class="split-item"><span>Erkin mablag‘</span><strong id="availableBalance">—</strong></div><div class="split-item"><span>Maqsadlarda</span><strong id="lockedBalance">—</strong></div></div><div class="balance-actions"><button class="btn btn-primary" data-action="transaction" data-kind="income">+ Kirim</button><button class="btn" data-action="transaction" data-kind="expense">− Chiqim</button></div><div class="payment-methods"><span>Onlayn to‘lovlar</span><div><button class="payment-option" disabled><strong>Payme</strong><small>Tez kunda</small></button><button class="payment-option" disabled><strong>Click</strong><small>Tez kunda</small></button></div></div></section>
           <section class="mini-panel"><div><div class="mini-title">Shu oyda jamg‘arildi</div><div class="mini-value" id="monthSaved">—</div><div class="mini-note">Maqsadlaringizga qo‘shilgan mablag‘</div></div><div class="mini-foot"><span class="status-dot"></span><span id="goalCount">0 ta faol maqsad</span></div></section>
         </div>
         <div class="content-grid"><section class="section-panel"><div class="section-head"><h2>Maqsadlar va kopilka</h2><button class="text-link" data-view-to="goals">Barchasi →</button></div><div class="goal-list" id="homeGoals"></div></section><section class="section-panel"><div class="section-head"><h2>Oxirgi amallar</h2><button class="text-link" data-view-to="analytics">Analitika →</button></div><div class="transaction-list" id="recentTransactions"></div></section></div>
@@ -53,40 +58,33 @@
     </main>
   </div>
 
-  <nav class="bottom-nav" aria-label="Asosiy navigatsiya"><button class="nav-item active" data-nav="home"><span class="nav-icon">⌂</span><span>Asosiy</span></button><button class="nav-item" data-nav="goals"><span class="nav-icon">◎</span><span>Maqsadlar</span></button><button class="nav-item" data-nav="analytics"><span class="nav-icon">▥</span><span>Analitika</span></button><button class="nav-item" data-nav="settings"><span class="nav-icon">⚙</span><span>Sozlamalar</span></button><button class="nav-item" data-nav="profile"><span class="nav-icon">◉</span><span>Profil</span></button></nav>
+  <nav class="bottom-nav" aria-label="Asosiy navigatsiya" hidden><button class="nav-item active" data-nav="home"><span class="nav-icon">⌂</span><span>Asosiy</span></button><button class="nav-item" data-nav="goals"><span class="nav-icon">◎</span><span>Maqsadlar</span></button><button class="nav-item" data-nav="analytics"><span class="nav-icon">▥</span><span>Analitika</span></button><button class="nav-item" data-nav="settings"><span class="nav-icon">⚙</span><span>Sozlamalar</span></button><button class="nav-item" data-nav="profile"><span class="nav-icon">◉</span><span>Profil</span></button></nav>
   <div class="modal-backdrop" id="modalBackdrop" role="presentation"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h2 id="modalTitle"></h2><button class="icon-button" data-action="close-modal" aria-label="Yopish">×</button></div><div class="modal-body" id="modalBody"></div></section></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div><div class="confetti" id="confetti"></div>
 
   <script>
     (()=>{
-      const STORAGE_KEY='smart-kopilka-v1';
       const RATE=12950;
       let currentRate=RATE;
       let rateUpdatedAt=null;
       let rateLive=false;
-      const categories=['🍲 Oziq-ovqat','🚕 Transport','🏠 Kommunal','☕ Ko‘ngilochar','🛍 Xarid','💊 Salomatlik','📦 Boshqa'];
       const presets=[
         'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=900&q=80',
         'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80',
         'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80'
       ];
-      const seed={balance:9350000,monthSaved:450000,consent:false,haptics:true,categories:[...categories],goals:[
-        {id:'goal-laptop',name:'Yangi noutbuk',target:5000000,saved:3500000,image:presets[0],request:null,createdAt:Date.now()-86400000*18},
-        {id:'goal-trip',name:'Tog‘ sayohati',target:4000000,saved:1200000,image:presets[2],request:null,createdAt:Date.now()-86400000*7}
-      ],transactions:[
-        {id:'t-1',kind:'income',name:'Oylik maosh',category:'Daromad',amount:8500000,date:Date.now()-86400000},
-        {id:'t-2',kind:'expense',name:'Oziq-ovqat',category:'🍲 Oziq-ovqat',amount:245000,date:Date.now()-86400000*2},
-        {id:'t-3',kind:'save',name:'Noutbuk uchun',category:'Maqsad',amount:300000,date:Date.now()-86400000*3},
-        {id:'t-4',kind:'expense',name:'Transport',category:'🚕 Transport',amount:48000,date:Date.now()-86400000*4}
-      ],debts:[]};
-      let state;
-      try{state=JSON.parse(localStorage.getItem(STORAGE_KEY))||structuredClone(seed)}catch{state=structuredClone(seed)}
-      state={...structuredClone(seed),...state};
+      const emptyState={balance:0,monthSaved:0,consent:false,haptics:true,categories:['🍲 Oziq-ovqat','🚕 Transport','🏠 Kommunal','☕ Ko‘ngilochar','🛍 Xarid','💊 Salomatlik','📦 Boshqa'],goals:[],transactions:[],debts:[]};
+      let state=structuredClone(emptyState);
+      let verifiedTelegramUser=null;
+      let profileInfo=null;
+      let telegramInitData='';
+      let authenticated=false;
+      let saveQueue=Promise.resolve();
       const $=(selector,root=document)=>root.querySelector(selector);
       const $$=(selector,root=document)=>[...root.querySelectorAll(selector)];
       const money=value=>`${Math.round(value).toLocaleString('uz-UZ')} so‘m`;
       const esc=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-      const save=()=>localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+      const save=()=>{if(!authenticated)return Promise.reject(new Error('Telegram profili serverda tasdiqlanmagan.'));const snapshot=structuredClone(state);saveQueue=saveQueue.catch(()=>{}).then(async()=>{const response=await fetch('/api/state',{method:'PUT',headers:{'Content-Type':'application/json','X-Telegram-Init-Data':telegramInitData},body:JSON.stringify({state:snapshot})});if(!response.ok)throw new Error('Server ma’lumotni saqlamadi.');return response.json()});saveQueue.catch(()=>toast('Serverga saqlanmadi. Internetni tekshirib, qayta urinib ko‘ring.'));return saveQueue};
       const isValidBackup=backup=>{const data=backup?.data;return backup?.format==='smart-kopilka-backup'&&backup.version===1&&data&&Number.isFinite(data.balance)&&data.balance>=0&&Array.isArray(data.goals)&&Array.isArray(data.transactions)&&Array.isArray(data.debts)&&Array.isArray(data.categories)&&data.categories.every(category=>typeof category==='string'&&category.length<=50)&&data.goals.every(goal=>typeof goal.name==='string'&&goal.name.length<=60&&Number.isFinite(goal.target)&&goal.target>0&&Number.isFinite(goal.saved)&&goal.saved>=0&&(!goal.image||/^https:\/\//.test(goal.image)||/^data:image\/(jpeg|png|webp);base64,/.test(goal.image)))&&data.transactions.every(item=>typeof item.name==='string'&&Number.isFinite(item.amount)&&item.amount>0&&Number.isFinite(item.date)&&['income','expense','save'].includes(item.kind))&&data.debts.every(debt=>typeof debt.person==='string'&&Number.isFinite(debt.amount)&&debt.amount>0&&['lent','owed'].includes(debt.direction))};
       const sumGoals=()=>state.goals.reduce((sum,goal)=>sum+goal.saved,0);
       const today=()=>new Date().toLocaleDateString('uz-UZ',{day:'numeric',month:'long',year:'numeric'});
@@ -94,7 +92,6 @@
       const relativeDate=timestamp=>new Date(timestamp).toLocaleString('uz-UZ',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:false});
       const formatDateTime=timestamp=>new Date(timestamp).toLocaleString('uz-UZ',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false});
       const addBusinessDays=(timestamp,days)=>{const date=new Date(timestamp);let remaining=days;while(remaining>0){date.setDate(date.getDate()+1);if(date.getDay()!==0&&date.getDay()!==6)remaining--}return date};
-      let verifiedTelegramUser=null;
       const userInfo=()=>verifiedTelegramUser;
       const toast=message=>{const element=$('#toast');element.textContent=message;element.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>element.classList.remove('show'),2600)};
       const haptic=()=>{if(!state.haptics)return;try{window.Telegram?.WebApp?.HapticFeedback?.impactOccurred('light')}catch{}}
@@ -159,7 +156,7 @@
       });
       $('#modalBackdrop').addEventListener('click',event=>{if(event.target===$('#modalBackdrop'))closeDialog()});document.addEventListener('keydown',event=>{if(event.key==='Escape')closeDialog()});
       document.addEventListener('change',event=>{if(event.target.id==='hapticsToggle'){state.haptics=event.target.checked;save()}if(event.target.id==='goalUpload'){const file=event.target.files?.[0];if(!file)return;if(file.size>10*1024*1024){toast('Rasm hajmi 10 MB dan kichik bo‘lsin.');event.target.value='';return}const reader=new FileReader();reader.onload=()=>{const image=new Image();image.onload=()=>{const scale=Math.min(1,1200/image.width);const canvas=document.createElement('canvas');canvas.width=Math.round(image.width*scale);canvas.height=Math.round(image.height*scale);canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);$('#goalImage').value=canvas.toDataURL('image/jpeg',.78);$$('.preset').forEach(item=>item.classList.remove('selected'));toast('Rasm tanlandi.')};image.src=reader.result};reader.readAsDataURL(file)}});
-      $('#backupFile').addEventListener('change',async event=>{const file=event.target.files?.[0];if(!file)return;if(file.size>8*1024*1024){toast('Zaxira fayli 8 MB dan kichik bo‘lishi kerak.');event.target.value='';return}try{const backup=JSON.parse(await file.text());if(!isValidBackup(backup))throw new Error('Noto‘g‘ri zaxira formati');state={...structuredClone(seed),...backup.data};save();render();toast('Zaxira ma’lumotlari tiklandi.')}catch{toast('Zaxira faylini tekshirib bo‘lmadi.')}finally{event.target.value=''}});
+      $('#backupFile').addEventListener('change',async event=>{const file=event.target.files?.[0];if(!file)return;if(file.size>8*1024*1024){toast('Zaxira fayli 8 MB dan kichik bo‘lishi kerak.');event.target.value='';return}try{const backup=JSON.parse(await file.text());if(!isValidBackup(backup))throw new Error('Noto‘g‘ri zaxira formati');state={...structuredClone(emptyState),...backup.data};await save();render();toast('Zaxira ma’lumotlari tiklandi.')}catch{toast('Zaxira faylini tekshirib, qayta urinib ko‘ring.')}finally{event.target.value=''}});
       document.addEventListener('submit',event=>{
         const form=event.target;if(!(form instanceof HTMLFormElement))return;event.preventDefault();const data=new FormData(form);
         if(form.id==='goalForm'){const target=Number(data.get('target'));if(!Number.isFinite(target)||target<=0){toast('Maqsad summasini tekshiring.');return}state.goals.unshift({id:crypto.randomUUID(),name:String(data.get('name')).trim(),target,saved:0,image:String(data.get('image')||presets[0]),request:null,createdAt:Date.now()});save();render();closeDialog();showView('goals');toast('Yangi maqsad yaratildi.')}
@@ -169,10 +166,9 @@
         if(form.id==='debtForm'){const amount=Number(data.get('amount'));if(!Number.isFinite(amount)||amount<=0){toast('Summani tekshiring.');return}state.debts.unshift({id:crypto.randomUUID(),person:String(data.get('person')).trim(),amount,direction:String(data.get('direction')),due:String(data.get('due')),paid:false});save();render();closeDialog();showView('debts');toast('Qarz qayd etildi.')}
         if(form.id==='categoryForm'){const name=String(data.get('name')).trim();if(state.categories.some(category=>category.toLowerCase()===name.toLowerCase())){toast('Bu kategoriya allaqachon bor.');return}state.categories.push(`📌 ${name}`);save();render();closeDialog();toast('Kategoriya qo‘shildi.')}
       });
-      try{const tg=window.Telegram?.WebApp;if(tg){tg.ready();tg.expand();if(tg.initData){fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tg.initData})}).then(response=>{if(!response.ok)throw new Error('Telegram sessiyasi tasdiqlanmadi');return response.json()}).then(result=>{verifiedTelegramUser=result.user;const firstName=verifiedTelegramUser.first_name||'Foydalanuvchi';$('#greeting').textContent=`Salom, ${firstName}`;$('#avatar').textContent=firstName[0].toUpperCase();renderAdmin();renderProfile()}).catch(()=>{$('#greeting').textContent='Telegram sessiyasini tekshiring'})}}}catch{}
-      render();
-      refreshRate();
-      setInterval(refreshRate,6*60*60*1000);
+      const setAuthMessage=(message,status='Tekshiruv muvaffaqiyatsiz')=>{$('#authMessage').textContent=message;$('#authStatus').textContent=status};
+      const initializeApp=async()=>{const tg=window.Telegram?.WebApp;if(!tg?.initData){setAuthMessage('Shaxsiy ma’lumotlar faqat Telegram Mini App ichida ochiladi. Telegram’dan botga kirib, ilovani qayta oching.','Telegram sessiyasi topilmadi');return}tg.ready();tg.expand();telegramInitData=tg.initData;$('#authStatus').textContent='Telegram hisobingiz tekshirilmoqda…';try{const authResponse=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:telegramInitData})});if(!authResponse.ok)throw new Error(authResponse.status===503?'PostgreSQL bazasi ulanmagan.':'Telegram sessiyasi tasdiqlanmadi.');const authResult=await authResponse.json();verifiedTelegramUser=authResult.user;profileInfo=authResult.profile;const stateResponse=await fetch('/api/state',{headers:{'X-Telegram-Init-Data':telegramInitData}});if(!stateResponse.ok)throw new Error('Hisob ma’lumotlarini serverdan yuklab bo‘lmadi.');const stateResult=await stateResponse.json();state={...structuredClone(emptyState),...stateResult.state};authenticated=true;const firstName=verifiedTelegramUser.first_name||'Foydalanuvchi';$('#greeting').textContent=`Salom, ${firstName}`;$('#avatar').textContent=firstName[0].toUpperCase();render();$('#mainApp').hidden=false;$('.bottom-nav').hidden=false;$('#authGate').hidden=true;refreshRate();setInterval(refreshRate,6*60*60*1000)}catch(error){authenticated=false;setAuthMessage(error.message||'Serverga ulanib bo‘lmadi. Keyinroq qayta urinib ko‘ring.','Hisob ochilmadi')}};
+      initializeApp();
     })();
   </script>
 </body>
